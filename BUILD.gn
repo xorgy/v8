@@ -631,6 +631,13 @@ config("toolchain") {
     }
   }
 
+  if (v8_current_cpu == "riscv") {
+    defines += [
+      "V8_TARGET_ARCH_RISCV",
+      "V8_INTERPRETED_REGEXP", # FIXME #0004: Everyone else has native RegExp
+    ]
+  }
+
   if (v8_current_cpu == "x86") {
     defines += [ "V8_TARGET_ARCH_IA32" ]
     if (is_win) {
@@ -3231,6 +3238,19 @@ v8_source_set("v8_base_without_compiler") {
       "src/regexp/s390/regexp-macro-assembler-s390.cc",
       "src/regexp/s390/regexp-macro-assembler-s390.h",
       "src/wasm/baseline/s390/liftoff-assembler-s390.h",
+    ]
+  } else if (v8_current_cpu == "riscv") {
+    sources += [  ### gcmole(arch:riscv) ###
+      "src/codegen/riscv/assembler-riscv-inl.h",
+      "src/codegen/riscv/assembler-riscv.cc",
+      "src/codegen/riscv/assembler-riscv.h",
+      "src/codegen/riscv/constants-riscv.h",
+      "src/codegen/riscv/cpu-riscv.cc",
+      "src/codegen/riscv/instructions-riscv.h",
+      "src/execution/riscv/frame-constants-riscv.h",
+      "src/execution/riscv/macro-assembler-riscv.cc",
+      "src/execution/riscv/macro-assembler-riscv.h",
+      "src/execution/riscv/simulator-riscv.h",
     ]
   }
 
